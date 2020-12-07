@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnStart=findViewById(R.id.btnStart);
 
-        btnStart.setOnApplyWindowInsetsListener(view->{
+        btnStart.setOnClickListener(view->{
             Intent intent= new Intent(this,SecondActivity.class);
             startActivity(intent);
         });
