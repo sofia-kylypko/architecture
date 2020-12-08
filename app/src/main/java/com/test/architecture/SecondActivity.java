@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
+
 public class SecondActivity extends AppCompatActivity {
+    Button btnStart2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,8 +16,8 @@ public class SecondActivity extends AppCompatActivity {
 
         btnStart2=findViewById(R.id.btnStart2);
 
-        btnStart2.setOnClickListener(view->{
-            Intent intent= new Intent(this,SecondActivity.class);
+        btnStart2.setOnClickListener(view ->{
+            Intent intent= new Intent(this,ThirdAcivity.class);
             startActivity(intent);
         });
     }
