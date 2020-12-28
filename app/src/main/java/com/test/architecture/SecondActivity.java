@@ -21,5 +21,6 @@ public class SecondActivity extends AppCompatActivity {
             Intent intent= new Intent(this,ThirdAcivity.class);
             startActivity(intent);
         });
+
     }
 }

@@ -8,23 +8,52 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import static com.test.architecture.Utils.password;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 public class MainActivity extends AppCompatActivity {
+    private String str;
+    private String str1;
+
+
     Button btnLogin;
     EditText etLogin;
     EditText etPassword;
-
+    private ArrayList<UserModel> users;
+    private HashMap<String, UserModel> userTypes = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         btnLogin = findViewById(R.id.btnLogin);
         etLogin = findViewById(R.id.etLogin);
         etPassword = findViewById(R.id.etPassword);
+        userTypes = new HashMap<>();
+        users = new Utils().getUsers();
+        userTypes.put("ENGENEER", users.get(2));
 
+        btnLogin.setOnClickListener(view -> {
+
+            if (checkLogin(etLogin.getText().toString(), etPassword.getText().toString()) /*&& checkPassword(etPassword.getText().toString())*/) {
+                startActivity();
+            } else if (etPassword.getText().toString().length() < 8) {
+                Toast.makeText(this, " Пароль не должен быть короче 8 символов", Toast.LENGTH_SHORT).show();
+            } else if (!(str == str1)) {
+                Toast.makeText(this, "Пароль должен иметь заглавную букву", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Пароль или логин неверный", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
+        /* моя версия
         btnLogin.setOnClickListener(view -> {
             if (checkLogin(etLogin.getText().toString()) && checkPasswordIncludeNumbers(etPassword.getText().toString()) && checkPasswordCapitalsLetters(etPassword.getText().toString()) && checkPasswordLength(etPassword.getText().toString())) {
                 if (isPasswordValid(etPassword.getText().toString())) {
@@ -33,12 +62,11 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, "Login or password is incorect", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
     }
-
     private boolean checkLogin(String login) {
-        for (int i = 0; i < Utils.logins.length; i++) {
-            if (Utils.logins[i].equals(login)) return true;
+        for (int i = 0; i < new Utils().getUsers().size(); i++) {
+            if (new Utils().getUsers().get(i).equals(login)) return true;
         }
         return false;
     }
@@ -49,9 +77,16 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+    private boolean checkLogin(String login, String password) {
+        for (UserModel userModel : users) {
+            if (userModel.getLogin().equals(login) && userModel.getPassword().equals(password))
+                return true;
+        }
+        return false;
+    }
 
 
-    private boolean checkPasswordIncludeNumbers(String password) {
+    /*private boolean checkPasswordIncludeNumbers(String password) {
         char[] array = password.toCharArray();
         for (char x : array) {
             if (Character.isDigit(x)) {
@@ -94,12 +129,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isPasswordValid(String password) {
-        String tmpPassword=Utils.password;
+    private boolean isPasswordValid (String password) {
+       tmpPassword= new Utils().getUsers();
         if (tmpPassword.equals(password)){
             return true;
         }else {
             return false;
         }
-    }
+    }*/
+
 }
