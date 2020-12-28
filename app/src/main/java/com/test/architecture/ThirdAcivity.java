@@ -102,6 +102,7 @@ public class ThirdAcivity extends AppCompatActivity {
         btnSumbol1.setOnClickListener (view -> {
             PhoneTextField.setText("#");
         });
+
         btnSumbol2.setOnClickListener (view -> {
             PhoneTextField.setText("*");
         });
