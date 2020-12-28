@@ -13,8 +13,6 @@ import java.util.ArrayList;
 
 
 public class ThirdAcivity extends AppCompatActivity {
-    ArrayList<String> phone = new ArrayList<>();
-
     Button btnNumber1;
     Button btnNumber2;
     Button btnNumber3;
@@ -108,8 +106,7 @@ public class ThirdAcivity extends AppCompatActivity {
         });
 
         btnClean.setOnClickListener(view -> {
-            phone.remove(phone.size());
-            PhoneTextField.setText((CharSequence) phone);
+
         });
 
         btnCall.setOnClickListener(view -> {
