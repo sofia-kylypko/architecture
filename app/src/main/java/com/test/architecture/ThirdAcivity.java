@@ -1,18 +1,26 @@
 package com.test.architecture;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class ThirdAcivity extends AppCompatActivity {
+
+    private static final int REQUEST_PHONE_CALL = 22222;
+
     Button btnNumber1;
     Button btnNumber2;
     Button btnNumber3;
@@ -31,7 +39,9 @@ public class ThirdAcivity extends AppCompatActivity {
 
     Button btnCall;
 
-    EditText PhoneTextField;
+    private ArrayList<Button> buttons;
+
+    EditText phoneTextField;
 
     /*int N2;
     int N3;
@@ -63,57 +73,93 @@ public class ThirdAcivity extends AppCompatActivity {
         btnSumbol1 = findViewById(R.id.btnSumbol1);
         btnSumbol2 = findViewById(R.id.btnSumbol2);
 
-        PhoneTextField = findViewById(R.id.PhoneTextField);
+        btnClean = findViewById(R.id.btnClean);
+        btnCall = findViewById(R.id.btnCall);
+
+        phoneTextField = findViewById(R.id.PhoneTextField);
+
+        buttons= new ArrayList<>(Arrays.asList(btnNumber0 , btnNumber1, btnNumber2, btnNumber3, btnNumber4, btnNumber5, btnNumber6, btnNumber7, btnNumber8, btnNumber9, btnSumbol1 , btnSumbol2));
+        setClickListeners();
+
+        btnCall.setOnClickListener(v -> call(phoneTextField.getText().toString()));
+
+        btnClean.setOnClickListener(v->{
+            if (phoneTextField.getText().length()==0) return;
+            phoneTextField.setText(phoneTextField.getText().toString().substring(0,phoneTextField.getText().length()-1));
+        });
 
 
-
+        /*
         btnNumber0.setOnClickListener (view -> {
-            PhoneTextField.setText("0");
+            phoneTextField.setText("0");
         });
         btnNumber1.setOnClickListener (view -> {
-            PhoneTextField.setText("1");
+            phoneTextField.setText("1");         /* ? PhoneTextField
         });
         btnNumber2.setOnClickListener (view -> {
-            PhoneTextField.setText("2");
+            phoneTextField.setText("2");
         });
         btnNumber3.setOnClickListener (view -> {
-            PhoneTextField.setText("3");
+            phoneTextField.setText("3");
         });
         btnNumber4.setOnClickListener (view -> {
-            PhoneTextField.setText("4");
+            phoneTextField.setText("4");
         });
         btnNumber5.setOnClickListener (view -> {
-            PhoneTextField.setText("5");
+            phoneTextField.setText("5");
         });
         btnNumber6.setOnClickListener (view -> {
-            PhoneTextField.setText("6");
+            phoneTextField.setText("6");
         });
         btnNumber7.setOnClickListener (view -> {
-            PhoneTextField.setText("7");
+            phoneTextField.setText("7");
         });
         btnNumber8.setOnClickListener (view -> {
-            PhoneTextField.setText("8");
+            phoneTextField.setText("8");
         });
         btnNumber9.setOnClickListener (view -> {
-            PhoneTextField.setText("9");
+            phoneTextField.setText("9");
         });
         btnSumbol1.setOnClickListener (view -> {
-            PhoneTextField.setText("#");
+            phoneTextField.setText("#");
         });
 
         btnSumbol2.setOnClickListener (view -> {
-            PhoneTextField.setText("*");
+            phoneTextField.setText("*");
         });
 
-        btnClean.setOnClickListener(view -> {
 
-        });
+        btnClean.setOnClickListener(v -> call(etPhone.getText().toString()));
 
         btnCall.setOnClickListener(view -> {
 
-        });
+        });*/
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data ){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==REQUEST_PHONE_CALL){
+            call(phoneTextField.getText().toString());
+        }
+    }
+
+    private void setClickListeners() {
+        for(Button button : buttons){
+            button.setOnClickListener(v->phoneTextField.setText(phoneTextField.getText().append(button.getText().toString())));
+        }
     }
 
 
+    private void call(String phone){
+        Intent intent= new Intent(Intent.ACTION_CALL);
+        Uri.parse("tel:" + phone);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
+        }
+        else
+        {
+            startActivity(intent);
+        }
+    }
 }
