@@ -12,6 +12,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+
+import com.test.architecture.threads.SomeThing;
+import com.test.architecture.threads.SomeThread;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,6 +58,10 @@ public class ThirdAcivity extends AppCompatActivity {
     int N0;
     */
 
+    private ProgressBar progressBar;
+
+    private SomeThread thread1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +84,13 @@ public class ThirdAcivity extends AppCompatActivity {
         btnClean = findViewById(R.id.btnClean);
         btnCall = findViewById(R.id.btnCall);
 
+
+
         phoneTextField = findViewById(R.id.PhoneTextField);
+
+        progressBar=findViewById(R.id.progressBar);
+
+        progressBar.setMax(100);
 
         buttons= new ArrayList<>(Arrays.asList(btnNumber0 , btnNumber1, btnNumber2, btnNumber3, btnNumber4, btnNumber5, btnNumber6, btnNumber7, btnNumber8, btnNumber9, btnSumbol1 , btnSumbol2));
         setClickListeners();
@@ -87,6 +101,9 @@ public class ThirdAcivity extends AppCompatActivity {
             if (phoneTextField.getText().length()==0) return;
             phoneTextField.setText(phoneTextField.getText().toString().substring(0,phoneTextField.getText().length()-1));
         });
+
+        startThreads();
+        setProgress();
 
 
         /*
@@ -135,6 +152,38 @@ public class ThirdAcivity extends AppCompatActivity {
 
         });*/
     }
+
+
+    private void setProgress(){
+        Thread thread=new Thread(()-> {
+            for (int i = 0; i <= 100; i++) {
+                progressBar.setProgress(i);
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.setName("ProgressThread");
+        thread.start();
+
+    }
+
+    private void startThreads(){
+        //first method
+        thread1=new SomeThread();
+        thread1.start();
+
+        //second method
+        SomeThing someThing=new SomeThing();
+        Thread thread2= new Thread(someThing);
+        thread2.start();
+
+        Thread thread3=new Thread(() -> System.out.println("Привет из потока 3"));
+        thread3.start();
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data ){
